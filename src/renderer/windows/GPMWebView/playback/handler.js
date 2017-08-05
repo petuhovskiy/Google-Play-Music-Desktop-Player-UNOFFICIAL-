@@ -21,9 +21,9 @@ window.wait(() => {
 
   window.GPM.on('change:track', (track) => {
     Logger.debug({
-      event: "change:track",
+      event: 'change:track',
       prev: currentTrack,
-      track: track,
+      track,
     });
     currentTrack = track;
     playTime = 0;
@@ -66,15 +66,15 @@ window.wait(() => {
     }
 
     Logger.debug({
-      event: "change:playback-time",
+      event: 'change:playback-time',
       info: playbackInfo,
-      progress: progress,
-      playTime: playTime,
+      progress,
+      playTime,
     });
 
     // Scrobble if played more than half or 4 minutes
     if (playbackInfo.total !== 0 && (playTime / playbackInfo.total) > 0.5 || playTime > 1000 * 60 * 4) {
-      Logger.debug("SCROBBLE EVENT!!!");
+      Logger.debug('SCROBBLE EVENT!!!');
       Emitter.fire('change:track:scrobble', {
         title: currentTrack.title,
         artist: currentTrack.artist,
