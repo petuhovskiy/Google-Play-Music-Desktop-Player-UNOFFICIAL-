@@ -1,0 +1,1 @@
+c:/Users/petuh/OneDrive/scripts/lastfm.bat

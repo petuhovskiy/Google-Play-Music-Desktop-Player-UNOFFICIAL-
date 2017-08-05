@@ -101,6 +101,13 @@ export const updateNowPlaying = (track, artist, album, duration) => {
 
 export const updateScrobble = (track, artist, album, timestamp, duration) => {
   if (Settings.get('lastFMKey')) {
+    Logger.debug({
+      track,
+      artist,
+      album,
+      timestamp,
+      duration,
+    });
     getLastFMSession()
       .then((session) => {
         lastfm.update('scrobble', session, {

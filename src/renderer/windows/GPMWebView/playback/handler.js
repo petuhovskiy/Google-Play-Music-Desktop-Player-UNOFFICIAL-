@@ -20,6 +20,11 @@ window.wait(() => {
   let currentTrack;
 
   window.GPM.on('change:track', (track) => {
+    Logger.debug({
+      event: "change:track",
+      prev: currentTrack,
+      track: track,
+    });
     currentTrack = track;
     playTime = 0;
     lastPosition = 0;
@@ -52,14 +57,24 @@ window.wait(() => {
 
   window.GPM.on('change:playback-time', (playbackInfo) => {
     Emitter.fire('change:playback-time', playbackInfo);
+
     const progress = playbackInfo.current - lastPosition;
     lastPosition = playbackInfo.current;
     // Update time if slider wasn't moved manually
     if (progress > 0 && progress < 2000) {
       playTime += progress;
     }
+
+    Logger.debug({
+      event: "change:playback-time",
+      info: playbackInfo,
+      progress: progress,
+      playTime: playTime,
+    });
+
     // Scrobble if played more than half or 4 minutes
     if (playbackInfo.total !== 0 && (playTime / playbackInfo.total) > 0.5 || playTime > 1000 * 60 * 4) {
+      Logger.debug("SCROBBLE EVENT!!!");
       Emitter.fire('change:track:scrobble', {
         title: currentTrack.title,
         artist: currentTrack.artist,
