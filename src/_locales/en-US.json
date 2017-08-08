@@ -24,6 +24,7 @@
   "label-pause-after-song": "Pause after this song",
   "label-quit": "Quit",
   "label-show-lyrics": "Show Lyrics (Beta)",
+  "label-manual-scrobble": "Scrobble current track",
   "label-unknown-artist": "Unknown Artist",
   "label-unknown-song": "Unknown Song",
   "label-version": "Version",

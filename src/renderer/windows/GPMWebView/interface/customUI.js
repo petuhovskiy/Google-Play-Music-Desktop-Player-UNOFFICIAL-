@@ -190,6 +190,10 @@ function installNowPlayingMenu() {
   installNowPlayingButton('label-show-lyrics', ':gpmdplyrics', () => {
     Emitter.fireAtMain('lyrics:show');
   });
+  installNowPlayingSeperator();
+  installNowPlayingButton('label-manual-scrobble', ':lastfmscrobble', () => {
+    Emitter.fire('lastfm:scrobble-current');
+  });
 }
 
 function handleZoom() {
