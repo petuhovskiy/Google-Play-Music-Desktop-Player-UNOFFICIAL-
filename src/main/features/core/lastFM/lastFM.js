@@ -2,7 +2,7 @@ import { BrowserWindow } from 'electron';
 import { LastFmNode } from 'lastfm';
 import path from 'path';
 
-import { LASTFM_API_KEY, LASTFM_API_SECRET } from '../../constants';
+import { LASTFM_API_KEY, LASTFM_API_SECRET } from '../../../constants';
 
 const lastfm = new LastFmNode({
   api_key: LASTFM_API_KEY,
@@ -147,32 +147,14 @@ Emitter.on('lastfm:auth', () => {
     });
 });
 
-let currentRating = {};
 Emitter.on('change:track', (event, details) => {
-  currentRating = {};
   // Last.fm isn't accepting 'Unknown Album'
   const album = details.album === 'Unknown Album' ? undefined : details.album;
   updateNowPlaying(details.title, details.artist, album, Math.round(details.duration / 1000));
 });
 
-Emitter.on('change:track:scrobble', (event, details) => {
-  if (details.duration > 30 * 1000) { // Scrobble only tracks longer than 30 seconds
-    const album = details.album === 'Unknown Album' ? undefined : details.album;
-    updateScrobble(details.title, details.artist, album, details.timestamp, Math.round(details.duration / 1000));
-  }
-});
-
-PlaybackAPI.on('change:rating', (newRating) => {
-  const currentSong = PlaybackAPI.currentSong(true);
-  setTimeout(() => {
-    if (JSON.stringify(currentSong) === JSON.stringify(PlaybackAPI.currentSong(true))) {
-      if (newRating.liked && !currentRating.liked) {
-        heartSong(true, currentSong.title, currentSong.artist, currentSong.album);
-      }
-      if (!newRating.liked && currentRating.liked) {
-        heartSong(false, currentSong.title, currentSong.artist, currentSong.album);
-      }
-      currentRating = newRating;
-    }
-  });
-});
+export const scrobbleTrack = (track) => {
+  if (track.duration < 30 * 1000) return;
+  const album = track.album === 'Unknown Album' ? undefined : track.album;
+  updateScrobble(track.title, track.artist, album, track.timestamp, Math.round(track.duration / 1000));
+};
