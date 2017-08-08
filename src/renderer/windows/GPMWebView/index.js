@@ -32,7 +32,7 @@ require('./chromecast');
 const waitForExternal = setInterval(() => {
   if (document.querySelector('#material-vslider') && document.querySelectorAll('audio')[1]) {
     clearInterval(waitForExternal);
-    const GMusic = require('gmusic.js');
+    const GMusic = require('petukhovsky_gmusic.js');
     require('gmusic-ui.js')(GMusic);
     require('gmusic-mini-player.js')(GMusic);
     const GMusicTheme = require('gmusic-theme.js');
