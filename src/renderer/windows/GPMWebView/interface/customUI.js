@@ -225,6 +225,19 @@ const fixChromecastButton = () => {
   cssRule('#player paper-icon-button[data-id="cast"] { display: inline-block; }');
 };
 
+const installLastfmButton = () => {
+  const button = document.createElement('paper-icon-button');
+  button.id = 'lastfm-button';
+  button.src = 'https://simpleicons.org/icons/lastfm.svg';
+
+  const playerButtons = document.querySelector('.material-player-middle');
+  playerButtons.appendChild(button);
+
+  button.addEventListener('click', () => {
+    Emitter.fire('lastfm:button');
+  });
+};
+
 let openSidebarStyles;
 const setKeepSidebarOpen = (keepSidebarOpen) => {
   const sidebar = document.querySelector('paper-drawer-panel');
@@ -278,6 +291,7 @@ window.wait(() => {
   handleZoom();
   installNowPlayingMenu();
   fixChromecastButton();
+  installLastfmButton();
   setKeepSidebarOpen(Settings.get('keepSidebarOpen'));
   setStaticAlbumArt(Settings.get('staticAlbumArt'));
 });

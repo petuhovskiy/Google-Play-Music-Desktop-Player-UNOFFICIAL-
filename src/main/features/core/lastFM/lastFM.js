@@ -30,11 +30,11 @@ const authLastFMToken = (token) =>
       show: false,
       autoHideMenuBar: true,
       frame: Settings.get('nativeFrame'),
-      icon: path.resolve(`${__dirname}/../../../assets/img/main.${(process.platform === 'win32' ? 'ico' : 'png')}`), // eslint-disable-line
+      icon: path.resolve(`${__dirname}/../../../../assets/img/main.${(process.platform === 'win32' ? 'ico' : 'png')}`), // eslint-disable-line
       title: 'Last.FM',
       webPreferences: {
         nodeIntegration: false,
-        preload: path.resolve(`${__dirname}/../../../renderer/lastFM.js`),
+        preload: path.resolve(`${__dirname}/../../../../renderer/lastFM.js`),
       },
     });
     authWindow.setMenu(null);
@@ -84,59 +84,6 @@ export const getLastFMSession = () =>
 //   getLastFMSession();
 // };
 
-export const updateNowPlaying = (track, artist, album, duration) => {
-  if (Settings.get('lastFMKey')) {
-    getLastFMSession()
-      .then((session) => {
-        lastfm.update('nowplaying', session, {
-          track,
-          artist,
-          album,
-          duration,
-        }).on('error', (err) => Logger.error('LASTFM ERROR', err));
-      })
-      .catch((err) => Logger.error('LASTFM ERROR', err));
-  }
-};
-
-export const updateScrobble = (track, artist, album, timestamp, duration) => {
-  if (Settings.get('lastFMKey')) {
-    Logger.debug({
-      track,
-      artist,
-      album,
-      timestamp,
-      duration,
-    });
-    getLastFMSession()
-      .then((session) => {
-        lastfm.update('scrobble', session, {
-          track,
-          artist,
-          album,
-          timestamp,
-          duration,
-        }).on('error', (err) => Logger.error('LASTFM ERROR', err));
-      })
-      .catch((err) => Logger.error('LASTFM ERROR', err));
-  }
-};
-
-// export const heartSong = (love, track, artist, album) => {
-export const heartSong = () => {
-  // if (Settings.get('lastFMKey')) {
-  //   getLastFMSession()
-  //     .then((session) => {
-  //       lastfm.request(`track.${love ? 'love' : 'unlove'}`, session, {
-  //         track,
-  //         artist,
-  //         album,
-  //       }).on('error', (err) => Logger.error('LASTFM ERROR', err));
-  //     })
-  //     .catch((err) => Logger.error('LASTFM ERROR', err));
-  // }
-};
-
 Emitter.on('lastfm:auth', () => {
   getLastFMSession()
     .then(() => {
@@ -147,14 +94,50 @@ Emitter.on('lastfm:auth', () => {
     });
 });
 
-Emitter.on('change:track', (event, details) => {
-  // Last.fm isn't accepting 'Unknown Album'
-  const album = details.album === 'Unknown Album' ? undefined : details.album;
-  updateNowPlaying(details.title, details.artist, album, Math.round(details.duration / 1000));
-});
+const updateNowPlaying = (track) => {
+  if (Settings.get('lastFMKey')) {
+    getLastFMSession()
+      .then((session) => {
+        lastfm.update('nowplaying', session, {
+          track: track.title,
+          artist: track.artist,
+          album: track.album,
+          duration: track.duration,
+        }).on('error', (err) => Logger.error('LASTFM ERROR', err));
+      })
+      .catch((err) => Logger.error('LASTFM ERROR', err));
+  }
+};
 
-export const scrobbleTrack = (track) => {
-  if (track.duration < 30 * 1000) return;
-  const album = track.album === 'Unknown Album' ? undefined : track.album;
-  updateScrobble(track.title, track.artist, album, track.timestamp, Math.round(track.duration / 1000));
+const updateScrobble = (track, timestamp) => {
+  if (Settings.get('lastFMKey')) {
+    getLastFMSession()
+      .then((session) => {
+        lastfm.update('scrobble', session, {
+          track: track.title,
+          artist: track.artist,
+          album: track.album,
+          duration: track.duration,
+          timestamp,
+        }).on('error', (err) => Logger.error('LASTFM ERROR', err));
+      })
+      .catch((err) => Logger.error('LASTFM ERROR', err));
+  }
+};
+
+const fixTrack = (_track) => {
+  const track = Object.assign({}, _track);
+  if (track.album === 'Unknown Album') track.album = undefined;
+  track.duration = Math.round(track.duration / 1000);
+  return track;
+};
+
+export const scrobbleTrack = (_track, timestamp) => {
+  const track = fixTrack(_track);
+  if (track.duration < 30) return;
+  updateScrobble(track, timestamp);
+};
+
+export const nowPlayingTrack = (track) => {
+  updateNowPlaying(fixTrack(track));
 };
