@@ -35,6 +35,7 @@
   "lastfm-login-error": "You appear to have left the authorization process, if this is a mistake, please try authorizing again",
   "lastfm-login-not-authorized": "Not Authorized",
   "lastfm-logout-button-text": "Log out of Last.FM",
+  "lastfm-map-thumbs-up-to-heart": "Automatically love tracks that are thumbed up",
 
   "lyrics-failed-message": "Sorry, we could not find any lyrics for this song",
   "lyrics-loading-message": "Loading lyrics...",
@@ -104,6 +105,8 @@
   "settings-option-auto-launch": "Automatically launch when I turn my computer on",
 
   "settings-option-save-page": "Automatically load last viewed page on startup",
+
+  "settings-option-start-minimized": "Start this application minimized",
 
   "settings-option-scroll-lyrics": "Scroll lyrics automatically while playing",
 

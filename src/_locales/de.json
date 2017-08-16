@@ -35,6 +35,7 @@
   "lastfm-login-error": "Du hast den Autorisierungsvorgang verlassen. Wenn das ein Fehler war, versuche es nochmal",
   "lastfm-login-not-authorized": "Nicht autorisiert",
   "lastfm-logout-button-text": "Von Last.FM abmelden",
+  "lastfm-map-thumbs-up-to-heart": "",
 
   "lyrics-failed-message": "Entschuldige, aber wir konnten keinen Liedtext finden",
   "lyrics-loading-message": "Lade Liedtext...",
@@ -104,6 +105,8 @@
   "settings-option-auto-launch": "Automatisch starten, wenn mein Computer hochfährt",
 
   "settings-option-save-page": "Zuletzt geöffnete Seite beim Start öffnen",
+
+  "settings-option-start-minimized": "",
 
   "settings-option-scroll-lyrics": "Liedtext automatisch scrollen",
 
