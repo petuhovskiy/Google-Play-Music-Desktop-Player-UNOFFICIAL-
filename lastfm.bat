@@ -1,1 +1,1 @@
-c:/Users/petuh/OneDrive/scripts/lastfm.bat
+"%OneDrive%/scripts/lastfm.bat"

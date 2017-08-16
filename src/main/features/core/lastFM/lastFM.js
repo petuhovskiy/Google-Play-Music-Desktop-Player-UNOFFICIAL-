@@ -111,6 +111,7 @@ const updateNowPlaying = (track) => {
 
 const updateScrobble = (track, timestamp) => {
   if (Settings.get('lastFMKey')) {
+    Logger.debug('updateScrobble', track);
     getLastFMSession()
       .then((session) => {
         lastfm.update('scrobble', session, {
@@ -119,7 +120,10 @@ const updateScrobble = (track, timestamp) => {
           album: track.album,
           duration: track.duration,
           timestamp,
-        }).on('error', (err) => Logger.error('LASTFM ERROR', err));
+        })
+        .on('error', (err) => Logger.error('LASTFM ERROR', err))
+        .on('success', (details) => Logger.debug('success', details))
+        .on('retrying', (details) => Logger.debug('retrying', details));
       })
       .catch((err) => Logger.error('LASTFM ERROR', err));
   }
